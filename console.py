@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from datetime import datetime
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -10,7 +11,11 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
+classes = {
+               'BaseModel': BaseModel, 'User': User, 'Place': Place,
+               'State': State, 'City': City, 'Amenity': Amenity,
+               'Review': Review
+              }
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -113,18 +118,42 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        kwarg = {}
+        arg = args.split(' ')
+        if len(arg) == 0:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+
+        
+        elif arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        else:
+            for i in range(1, len(arg)):
+                key, val = arg[i].split('=')
+                if val[0] == '"':
+                    val = val.strip('"').replace('_',' ')
+                else:
+                    try:
+                        val = int(val)
+                    except:
+                        try:
+                            val = float(val)
+                        except:
+                            continue
+                    
+                kwarg[key] = val
+
+        
+       
+        new_instance = classes[arg[0]](**kwarg)
         storage.save()
         print(new_instance.id)
         storage.save()
+     
 
     def help_create(self):
         """ Help information for the create method """
@@ -200,7 +229,6 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
