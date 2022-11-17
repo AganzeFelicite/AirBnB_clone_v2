@@ -22,7 +22,7 @@ class FileStorage:
 
     def delete(self, obj=None):
         """delete an object from the __object"""
-        if obj is None:
+        if obj is not None:
             try:
                 del FileStorage.__objects[
                     '{}.{}'.format(type(obj).__name__, obj.id)
