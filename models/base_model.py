@@ -43,9 +43,9 @@ class BaseModel:
             for key, val in kwargs.items():
                 if "__class__" not in key:
                     setattr(self, key, val)
+
     def __str__(self):
         """Returns a string representation of the instance"""
-        
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
                                          self.__dict__)
 
