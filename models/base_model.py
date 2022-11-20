@@ -50,6 +50,7 @@ class BaseModel:
 
     def __str__(self):
         """Returns a string representation of the instance"""
+        del self.__dict__["_sa_instance_state"]
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
                                          self.__dict__)
 
