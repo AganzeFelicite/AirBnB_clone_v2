@@ -14,6 +14,8 @@ class User(BaseModel, Base):
     last_name = Column(String(128), nullable=True)
     places = relationship('Place', backref='user',
                           cascade='all, delete')
+    review = relationship('Review', backref='user',
+                          cascade='all, delete')
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
