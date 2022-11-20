@@ -143,7 +143,7 @@ class HBNBCommand(cmd.Cmd):
                         val = float(val)
                     except(ValueError):
                         continue
-            kwarg[key] = val
+                kwarg[key] = val
         new_instance = classes[arg[0]](**kwarg)
         print(new_instance.id)
         new_instance.save()
