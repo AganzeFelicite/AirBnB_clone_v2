@@ -16,27 +16,33 @@ class BaseModel:
         created_at = Column(DateTime, default=datetime.utcnow)
         updated_at = Column(DateTime, default=datetime.utcnow)
 
-        def __init__(self, *args, **kwargs):
-        """Initialization of the base model"""
-        if kwargs:
-            for key, value in kwargs.items():
-                if key != "__class__":
-                    setattr(self, key, value)
-            if kwargs.get("created_at", None) and type(self.created_at) is str:
-                self.created_at = datetime.strptime(kwargs["created_at"], time)
+    def __init__(self, *args, **kwargs):
+        if len(kwargs) == 0:
+            # if no dictionary of attributes is passed in
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
+        else:
+            # assign a dictionary of attributes to instance
+
+            # preserve existing created_at time
+            if kwargs.get('created_at'):
+                kwargs["created_at"] = datetime.strptime(
+                    kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
             else:
-                self.created_at = datetime.utcnow()
-            if kwargs.get("updated_at", None) and type(self.updated_at) is str:
-                self.updated_at = datetime.strptime(kwargs["updated_at"], time)
+                self.created_at = datetime.utcnow()  # assign current time
+            if kwargs.get('updated_at'):
+                # preserve existing updated_at time
+                kwargs["updated_at"] = datetime.strptime(
+                    kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
             else:
                 self.updated_at = datetime.utcnow()
-            if kwargs.get("id", None) is None:
-                self.id = str(uuid.uuid4())
-        else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = self.created_a
 
+            if not kwargs.get('id'):
+                self.id = str(uuid.uuid4())
+
+            for key, val in kwargs.items():
+                if "__class__" not in key:
+                    setattr(self, key, val)
     def __str__(self):
         """Returns a string representation of the instance"""
         
