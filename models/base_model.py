@@ -12,6 +12,7 @@ if models.storage_t == "db":
 else:
     Base = object
 
+
 class BaseModel:
     """A base class for all hbnb models"""
     if models.storage_t == "db":
@@ -74,5 +75,3 @@ class BaseModel:
         if "_sa_instance_state" in new_dict:
             new_dict.pop("_sa_instance_state", None)
         return new_dict
-
-  
