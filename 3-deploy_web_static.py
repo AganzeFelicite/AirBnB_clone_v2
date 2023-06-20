@@ -5,7 +5,7 @@ from os.path import exists
 from datetime import datetime
 
 
-env.hosts = ['3.236.108.24', '100.25.199.209']
+env.hosts = ['52.23.213.229', '100.25.220.47']
 
 
 def deploy():
